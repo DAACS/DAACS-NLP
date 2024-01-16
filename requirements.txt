@@ -1,0 +1,12 @@
+pip
+ipython
+install-jdk
+wheel
+awscli
+pyspark==3.3.0
+pyarrow
+numpy
+requests
+pyspark[sql]
+pandas
+nltk
