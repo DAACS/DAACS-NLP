@@ -1,28 +1,26 @@
 import os
+from dotenv import load_dotenv
 
-# from langchain.chat_models import ChatOpenAI
+
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
 )
 from langchain.output_parsers import PydanticOutputParser
 from pydantic import BaseModel, Field
-from dotenv import load_dotenv
-
 from langchain_openai import ChatOpenAI
 
-
-# Define your desired data structure.
 class Country(BaseModel):
     capital: str = Field(description="capital of the country")
-    name: str = Field(description="name of the country")
-
+    name: str = Field(description="name of the country, in uppercase")
+    dancing: str = Field(description="a one paragraph overview of the most famous folk dancing from that country")
+    description: str = Field(description="a one paragraph overview of nightlight within the capital city")
 
 load_dotenv()
 
 OPENAI_MODEL = "gpt-4"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-print(f"OPENAPIKEY is {OPENAI_API_KEY }")
+
 
 PROMPT_COUNTRY_INFO = """
     Provide information about {country}.
@@ -36,9 +34,8 @@ def main():
 
     # setup the chat model
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name=OPENAI_MODEL)
-    message = HumanMessagePromptTemplate.from_template(
-        template=PROMPT_COUNTRY_INFO,
-    )
+    
+    message = HumanMessagePromptTemplate.from_template(template=PROMPT_COUNTRY_INFO)
     chat_prompt = ChatPromptTemplate.from_messages([message])
 
     # get user input
@@ -49,14 +46,11 @@ def main():
         country=country_name, format_instructions=parser.get_format_instructions()
     )
 
-    # Replace this line:
-    # output = llm(chat_prompt_with_values.to_messages())
-    # With this line:
     output = llm.invoke(chat_prompt_with_values.to_messages())
 
     country = parser.parse(output.content)
-    # print the response
-    print(f"The capital of {country.name} is {country.capital}.")
+    
+    print(f"Country: {country.name} Capital: {country.capital}\n\nNight Life Overview: {country.description}\n\nFolk Dance History: {country.dancing}")
 
 
 if __name__ == "__main__":
