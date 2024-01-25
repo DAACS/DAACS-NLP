@@ -10,3 +10,7 @@ requests
 pyspark[sql]
 pandas
 nltk
+python-dotenv
+openai
+requests
+langchain
