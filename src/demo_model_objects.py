@@ -55,3 +55,15 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+"""
+(.venv) hurricane:daacs-nlp afraser$ python ./src/demo_model_objects.py
+Enter the name of a country: italy
+Generating response...
+Country: ITALY Capital: Rome
+
+Night Life Overview: Rome, the capital of Italy, offers a vibrant nightlife scene. From cozy wine bars to bustling clubs, the city has something for everyone. The Trastevere district is popular for its quaint streets and lively pubs, while the Testaccio district is known for its late-night clubs and discos. The city is also home to a number of sophisticated cocktail bars and lounges.
+
+Folk Dance History: Tarantella is the most recognized style of folk dance in Italy. It is characterized by swift, rotating movements in rhythm with ever-increasing music. Originating in the southern regions, this dance was initially performed by couples. Today, it's often associated with Italian weddings and other celebrations.
+"""
