@@ -37,7 +37,7 @@ Make sure you have python path and OPENAPI_KEY in there, like this.
 cat ./.env
 
 PYTHONPATH=/Users/afraser/Documents/src/daacs-nlp/src:/Users/afraser/Documents/src/daacs-nlp/.venv/lib/python3.11/site-packages
-OPENAPI_KEY=sk-2r7jkiZZNSdJEBrZKnkuT3Blb*******STUFFGETYOUROWN*********
+OPENAI_API_KEY=sk-2r7jkiZZNSdJEBrZKnkuT3Blb*******STUFFGETYOUROWN*********
 ```
 
 ### Edit your .venv/bin/activate 
