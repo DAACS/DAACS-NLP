@@ -21,7 +21,6 @@ load_dotenv()
 OPENAI_MODEL = "gpt-4"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
-
 PROMPT_COUNTRY_INFO = """
     Provide information about {country}.
     {format_instructions}
