@@ -54,3 +54,4 @@ MANIFEST
 lib/
 *.crc 
 *_SUCCESS 
+*nogit*
