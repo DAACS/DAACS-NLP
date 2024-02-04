@@ -5,6 +5,8 @@ import os
 
 
 class Bootstrap:
+    PROJ_ROOT = None
+
     """
     Used for loading data directly into a spark dataframe.
 
@@ -26,8 +28,13 @@ class Bootstrap:
 
     """
     def __init__(self):
-        # from daacs.infrastructure.bootstrap import Bootstrap 
-        pass
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        self.PROJ_ROOT = os.path.abspath(os.path.join(current_directory, '..', '..', '..'))
+        self.DATA_DIR = f"{self.PROJ_ROOT}/data"
+
+    def file_url(self, fn: str, prefix="file:///"):
+        ## Returns a file url, for spark.read.parquet(file_url) or pd.read_parquet(file_url)
+        return f"{prefix}{self.DATA_DIR}/wgu/{fn}"
 
     def load_config(self, ini_fn: str = f"resources/{os.getenv('MODULE')}.ini") -> configparser.ConfigParser:
         ini_path = self.get_resource(ini_fn)

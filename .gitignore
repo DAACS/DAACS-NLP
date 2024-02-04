@@ -55,3 +55,5 @@ lib/
 *.crc 
 *_SUCCESS 
 *nogit*
+data*
+.Rhistory
