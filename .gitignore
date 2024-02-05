@@ -55,3 +55,8 @@ lib/
 *.crc 
 *_SUCCESS 
 *nogit*
+data*
+.Rhistory
+*.crc
+*.parquet
+.vscode/* 

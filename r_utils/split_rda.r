@@ -22,9 +22,8 @@ export_rda_to_parquet <- function(rda_file_path, output_dir) {
   }
 }
 
-# Usage
-# make sure your wgu.rda file is in a folder called ./nogit/ 
-rda_file_path <- "./nogit/wgu.rda" # Replace with the path to your .rda file
-output_dir <- "./nogit/wdu"         # Replace with your desired output directory
-
-# export_rda_to_parquet(rda_file_path, output_dir)
+# be sure to: setwd("/Users/afraser/Documents/src/daacs-nlp") 
+# make sure your wgu.rda file is in a folder called ./nogit/
+rda_file_path <- "./nogit/wgu.rda" 
+output_dir <- "./nogit/wdu"         # 
+export_rda_to_parquet(rda_file_path, output_dir)
