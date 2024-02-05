@@ -57,3 +57,5 @@ lib/
 *nogit*
 data*
 .Rhistory
+*.crc
+*.parquet

@@ -4,6 +4,7 @@ import os
 
 
 
+
 class Bootstrap:
     PROJ_ROOT = None
 
@@ -100,3 +101,21 @@ class Bootstrap:
             logging.getLogger().setLevel(logging.INFO)
         if level == "debug":
             logging.getLogger().setLevel(logging.DEBUG)
+
+    def rename_parquet_files(self, directory: str, new_name: str):
+        ## /Users/afraser/Documents/src/daacs-nlp/data/wgu_trained
+        ##         contains a file like part-00000 ... .snappy.parquet
+        ## you want it to become essays.parquet
+    
+        ## Bootstrap().rename_parquet_files(out_dir, "essays")
+        ## 
+        ## Then, move it to data/wgu
+        for filename in os.listdir(directory):
+            if filename.endswith(".parquet"):
+                # Construct the full file path
+                old_file = os.path.join(directory, filename)
+                # Define the new file name; you might want to add logic to make this unique
+                new_file = os.path.join(directory, new_name + ".parquet")
+                # Rename the file
+                os.rename(old_file, new_file)
+                print(f"Renamed {old_file} to {new_file}")
