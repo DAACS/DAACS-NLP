@@ -5,7 +5,7 @@ wheel
 awscli
 pyspark==3.3.0
 pyarrow
-numpy
+#numpy
 requests
 pyspark[sql]
 pandas
@@ -18,3 +18,12 @@ langchain-openai
 pyreadr
 jupyter
 loguru
+torch
+jupyterlab
+transformers
+
+huggingface_hub
+llama-cpp-python==0.1.78
+numpy==1.23.4
+simpletransformers
+accelerate

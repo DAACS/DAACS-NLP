@@ -60,3 +60,13 @@ data*
 *.crc
 *.parquet
 .vscode/* 
+mysensa* 
+model*
+tensor_logs*
+runs*
+cache_dir*
+bert_model/*
+src/notebook/cache_dir/*
+src/notebook/output_st/*
+src/notebook/runs/*
+*.ipynb_checkpoints*
