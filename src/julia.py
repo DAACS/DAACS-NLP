@@ -16,3 +16,5 @@ essays_human_ratings = spark.read.parquet(b.file_url(WGU_File.essay_human_rating
 train = essays_human_ratings.filter(col(DAACS_ID) < 400)
 test = essays_human_ratings.filter(col(DAACS_ID) > 400)
 
+train_pandas = train.toPandas() 
+

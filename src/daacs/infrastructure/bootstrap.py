@@ -29,9 +29,16 @@ class Bootstrap:
 
     """
     def __init__(self):
+
+        os.environ['TOKENIZERS_PARALLELISM'] = 'false'
         current_directory = os.path.dirname(os.path.abspath(__file__))
         self.PROJ_ROOT = os.path.abspath(os.path.join(current_directory, '..', '..', '..'))
         self.DATA_DIR = f"{self.PROJ_ROOT}/data"
+        self.MODEL_DIR = f"{self.PROJ_ROOT}/model"
+        self.TENSOR_LOGS = f"{self.PROJ_ROOT}/tensor_logs"
+        self.SIMPLE_DIR = f"{self.PROJ_ROOT}/simple_model"
+        self.BERT_DIR = f"{self.PROJ_ROOT}/bert_model"
+        
 
     def file_url(self, fn: str, prefix="file:///"):
         ## Returns a file url, for spark.read.parquet(file_url) or pd.read_parquet(file_url)
