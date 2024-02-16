@@ -1,0 +1,78 @@
+#BERT Grader
+# In this file, we will use the model BERT-GRADER to try to grade the essays
+
+# Import model
+from transformers import pipeline
+
+pipe = pipeline("text-classification", model="intone/BERT-GRADER")
+
+# Load model directly
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+tokenizer = AutoTokenizer.from_pretrained("intone/BERT-GRADER")
+model = AutoModelForSequenceClassification.from_pretrained("intone/BERT-GRADER")
+
+inputs = tokenizer("The SRL survey enlightened my understanding about several aspects of my learning skills, as well as confirmed some things I already knew. Below are my thoughts about the results and how the feedback can assist me on my journey. Under the Metacognition category, I was listed as a frequent planner; this was something I already knew about myself. I am generally a planner in both my personal and professional life. This quality usually helps me with staying on top of  my responsibilities, although I have learned how to be flexible when things don't go as planned. I was also listed as someone who  frequently evaluates my learning. Since planning is something I do regularly, it seems natural that evaluation would go right along with the planning. I never actually considered the fact that I evaluate my learning skills constantly, but I'm usually able to adapt to new ideas, and circumstances relatively quickly, so evaluation must play a large role in that skillset. Frequent monitoring was also listed as another one of my skillsets. This tells me that I have a high level of awareness about my thinking and that helps in letting me know when I need to make adjusts to improve my learning; this will definitely be helpful as my courses get harder.  Under the Strategies category, I was listed as someone who frequently uses strategies as part of my learning process. These strategies include: Time management, seeking help, understanding and managing my environment. Since these are strategies I currently use, I already have the foundation to improve in these areas by using the resources available to me at WGU. I can create more of a \"study-focus\" environment by setting time and space boundaries for myself, as well as tapping into new resources to gain better understanding throughout my journey. Finally, my motivation was listed as high in every category and low in test anxiety. This means that overall I am very motivated to complete my degree and master my proficiency in every skillset. For me, continuing to work hard everyday, being honest with myself and learning from my mistakes will contribute to my continued motivation and overall success.", return_tensors="pt")
+#tokenizer("The SRL survey enlightened my understanding about several aspects of my learning skills, as well as confirmed some things I already knew. Below are my thoughts about the results and how the feedback can assist me on my journey. Under the Metacognition category, I was listed as a frequent planner; this was something I already knew about myself. I am generally a planner in both my personal and professional life. This quality usually helps me with staying on top of  my responsibilities, although I have learned how to be flexible when things don't go as planned. I was also listed as someone who  frequently evaluates my learning. Since planning is something I do regularly, it seems natural that evaluation would go right along with the planning. I never actually considered the fact that I evaluate my learning skills constantly, but I'm usually able to adapt to new ideas, and circumstances relatively quickly, so evaluation must play a large role in that skillset. Frequent monitoring was also listed as another one of my skillsets. This tells me that I have a high level of awareness about my thinking and that helps in letting me know when I need to make adjusts to improve my learning; this will definitely be helpful as my courses get harder.  Under the Strategies category, I was listed as someone who frequently uses strategies as part of my learning process. These strategies include: Time management, seeking help, understanding and managing my environment. Since these are strategies I currently use, I already have the foundation to improve in these areas by using the resources available to me at WGU. I can create more of a \"study-focus\" environment by setting time and space boundaries for myself, as well as tapping into new resources to gain better understanding throughout my journey. Finally, my motivation was listed as high in every category and low in test anxiety. This means that overall I am very motivated to complete my degree and master my proficiency in every skillset. For me, continuing to work hard everyday, being honest with myself and learning from my mistakes will contribute to my continued motivation and overall success.")
+#model(inputs)
+
+#tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+#model = BertForSequenceClassification.from_pretrained("bert-base-uncased")
+
+#inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
+#outputs = model(inputs)
+
+#print(outputs)
+
+#labels = torch.tensor([1]).unsqueeze(0)  # Batch size 1
+outputs = model(**inputs)
+print(outputs)
+
+# This is using the model directly from the website. Minimal code required. Can be used for quickly testing other models.
+# You could loop through the essays to get all the outputs.
+# API key was free to make and use
+
+# API Key in bertGrader file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import requests
+
+API_URL = "https://api-inference.huggingface.co/models/intone/BERT-GRADER"
+headers = {"Authorization": f"Bearer {API_TOKEN}"}
+
+def query(payload):
+	response = requests.post(API_URL, headers=headers, json=payload)
+	return response.json()
+	
+output = query({
+	"inputs": "The SRL survey enlightened my understanding about several aspects of my learning skills, as well as confirmed some things I already knew. Below are my thoughts about the results and how the feedback can assist me on my journey. Under the Metacognition category, I was listed as a frequent planner; this was something I already knew about myself. I am generally a planner in both my personal and professional life. This quality usually helps me with staying on top of  my responsibilities, although I have learned how to be flexible when things don't go as planned. I was also listed as someone who  frequently evaluates my learning. Since planning is something I do regularly, it seems natural that evaluation would go right along with the planning. I never actually considered the fact that I evaluate my learning skills constantly, but I'm usually able to adapt to new ideas, and circumstances relatively quickly, so evaluation must play a large role in that skillset. Frequent monitoring was also listed as another one of my skillsets. This tells me that I have a high level of awareness about my thinking and that helps in letting me know when I need to make adjusts to improve my learning; this will definitely be helpful as my courses get harder.  Under the Strategies category, I was listed as someone who frequently uses strategies as part of my learning process. These strategies include: Time management, seeking help, understanding and managing my environment. Since these are strategies I currently use, I already have the foundation to improve in these areas by using the resources available to me at WGU. I can create more of a \"study-focus\" environment by setting time and space boundaries for myself, as well as tapping into new resources to gain better understanding throughout my journey. Finally, my motivation was listed as high in every category and low in test anxiety. This means that overall I am very motivated to complete my degree and master my proficiency in every skillset. For me, continuing to work hard everyday, being honest with myself and learning from my mistakes will contribute to my continued motivation and overall success.",
+})
+print(output)
+
+
+
+API_URL = "https://api-inference.huggingface.co/models/grammarly/detexd-roberta-base"
+headers = {"Authorization": f"Bearer {API_TOKEN}"}
+
+def query(payload):
+	response = requests.post(API_URL, headers=headers, json=payload)
+	return response.json()
+	
+output = query({
+	"inputs": "The SRL survey enlightened my understanding about several aspects of my learning skills, as well as confirmed some things I already knew. Below are my thoughts about the results and how the feedback can assist me on my journey. Under the Metacognition category, I was listed as a frequent planner; this was something I already knew about myself. I am generally a planner in both my personal and professional life. This quality usually helps me with staying on top of  my responsibilities, although I have learned how to be flexible when things don't go as planned. I was also listed as someone who  frequently evaluates my learning. Since planning is something I do regularly, it seems natural that evaluation would go right along with the planning. I never actually considered the fact that I evaluate my learning skills constantly, but I'm usually able to adapt to new ideas, and circumstances relatively quickly, so evaluation must play a large role in that skillset. Frequent monitoring was also listed as another one of my skillsets. This tells me that I have a high level of awareness about my thinking and that helps in letting me know when I need to make adjusts to improve my learning; this will definitely be helpful as my courses get harder.  Under the Strategies category, I was listed as someone who frequently uses strategies as part of my learning process. These strategies include: Time management, seeking help, understanding and managing my environment. Since these are strategies I currently use, I already have the foundation to improve in these areas by using the resources available to me at WGU. I can create more of a \"study-focus\" environment by setting time and space boundaries for myself, as well as tapping into new resources to gain better understanding throughout my journey. Finally, my motivation was listed as high in every category and low in test anxiety. This means that overall I am very motivated to complete my degree and master my proficiency in every skillset. For me, continuing to work hard everyday, being honest with myself and learning from my mistakes will contribute to my continued motivation and overall success.",
+})
+print(output)
