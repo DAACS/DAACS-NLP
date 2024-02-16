@@ -70,3 +70,6 @@ src/notebook/cache_dir/*
 src/notebook/output_st/*
 src/notebook/runs/*
 *.ipynb_checkpoints*
+wandb/*
+logs/*
+random_forest_model.joblib

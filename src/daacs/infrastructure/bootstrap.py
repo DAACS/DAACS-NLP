@@ -1,7 +1,8 @@
 import configparser
 import logging
 import os
-
+from daacs.infrastructure.wgu_file import WGU_File
+from pyspark.sql.functions import desc, lit, udf, corr, when, lower, col
 
 
 
@@ -126,3 +127,37 @@ class Bootstrap:
                 # Rename the file
                 os.rename(old_file, new_file)
                 print(f"Renamed {old_file} to {new_file}")
+
+    def get_essays_and_grades(self):
+        DAACS_ID="daacs_id"
+        spark = self.get_spark() 
+
+        ## These are for test and train!! We hae grades for these!! 
+        ## Load WGU and filter out the records that are in there twice.
+
+        ## use average of two raters? 
+        ## use the ones where the agree.
+
+        ratings_columns = ['EssayID', 'TotalScore1', 'TotalScore2', 'TotalScore']
+        wgu_ratings_raw = spark.read.option("header", True)\
+            .csv(self.file_url(WGU_File.wgu_ratings))\
+            .select(ratings_columns)\
+            .withColumnRenamed("EssayID", DAACS_ID)
+        essay_id_counts = wgu_ratings_raw.groupBy(DAACS_ID).count()
+        unique_essay_ids = essay_id_counts.filter(col("count") == 1).select(DAACS_ID)
+        wgu_ratings = wgu_ratings_raw.join(unique_essay_ids, [DAACS_ID])
+
+        # wgu_ratings.printSchema() 
+        # root
+        #  |-- daacs_id: string (nullable = true)
+        #  |-- TotalScore1: string (nullable = true)
+        #  |-- TotalScore2: string (nullable = true)
+        #  |-- TotalScore: string (nullable = true)
+
+
+        essays_human_rated = spark.read.parquet(self.file_url(WGU_File.essay_human_ratings))\
+            .withColumnRenamed("EssayID", DAACS_ID)\
+            .join(unique_essay_ids, [DAACS_ID])
+
+        essays_and_grades = essays_human_rated.join(wgu_ratings, [DAACS_ID])
+        return essays_and_grades
