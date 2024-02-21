@@ -18,4 +18,3 @@ good_student = StringUtils.clean_sentence(SampleData.good_student)
 new_essay_transformed = pipeline.named_steps['tfidfvectorizer'].transform([good_student])
 prediction = pipeline.named_steps['randomforestregressor'].predict(new_essay_transformed)
 print(f"Predicted Score for good student: {prediction[0]}")
-
