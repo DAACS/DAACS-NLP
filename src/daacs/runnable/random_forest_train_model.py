@@ -1,6 +1,7 @@
-
 import os
 import joblib
+import nltk
+from nltk.corpus import stopwords
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import make_pipeline
@@ -9,47 +10,45 @@ from math import sqrt
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from daacs.infrastructure.bootstrap import Bootstrap
-from pyspark.ml.feature import StopWordsRemover
-from pyspark.sql.functions import col, lower, regexp_replace, split
-
+from daacs.infrastructure.decorators.timeit import timeit
+# Initialize and process data
 b = Bootstrap()
+nltk.download("stopwords")
 essay_column = "essay_modified"
 model_file = 'random_forest_model.joblib'
 
-essays = b.get_essays_and_grades()\
-    .withColumn("essay_lower", lower(col("essay")))\
-    .withColumn("essay_no_special", regexp_replace(col("essay_lower"), "[^\\w\\s]", ""))\
-    .withColumn("essay_words", split(col("essay_no_special"), "\\s+"))
+essays_pd = b.get_essays_and_grades()
+stop_words = set(stopwords.words('english'))
 
-stop_words_remover = StopWordsRemover(inputCol="essay_words", outputCol=essay_column)
-essays = stop_words_remover.transform(essays)
-essays_pd = essays.toPandas()
-essays_pd[essay_column] = essays_pd[essay_column].apply(lambda x: ' '.join(x))
-
-# Convert score to numeric and handle NaN values
+# Text preprocessing
+essays_pd['essay_modified'] = essays_pd['essay'].str.lower().str.replace("[^\\w\\s]", "", regex=True)
+essays_pd['essay_words'] = essays_pd['essay_modified'].str.split()
+essays_pd['essay_modified'] = essays_pd['essay_words'].apply(lambda x: ' '.join([word for word in x if word not in stop_words]))
 essays_pd['TotalScore1'] = pd.to_numeric(essays_pd['TotalScore1'], errors='coerce')
 essays_pd.dropna(subset=['TotalScore1'], inplace=True)
 
-# Split data into training and testing sets
-X = essays_pd[essay_column]  # Assuming 'essay_modified' is the column with cleaned essays
+# Prepare training and test data
+X = essays_pd[essay_column]
 y = essays_pd['TotalScore1']
 train_texts, test_texts, train_labels, test_labels = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Check if a trained model exists
-if os.path.exists(model_file):
-    # Load the trained model
-    pipeline = joblib.load(model_file)
-else:
-    # Create and fit the pipeline only if the model doesn't exist
+@timeit
+def train_model(train_texts, train_labels):
     pipeline = make_pipeline(
         TfidfVectorizer(),
         RandomForestRegressor(n_estimators=100, random_state=42)
     )
     pipeline.fit(train_texts, train_labels)
-    # Save the trained model to disk
-    joblib.dump(pipeline, model_file)
+    return pipeline
 
-# Make predictions on the test data
+
+pipeline = train_model(train_texts, train_labels)
+
+# Save the trained model to disk (this will overwrite the existing file)
+joblib.dump(pipeline, model_file)
+
+# Optional: Load and predict for evaluation
+pipeline = joblib.load(model_file)
 predictions = pipeline.predict(test_texts)
 
 # Evaluate the model

@@ -6,8 +6,6 @@ from daacs.infrastructure.string_utils import StringUtils
 # Load the trained model
 pipeline = joblib.load('random_forest_model.joblib')
 
-
-
 bad_student = StringUtils.clean_sentence(SampleData.bad_student)
 new_essay_transformed = pipeline.named_steps['tfidfvectorizer'].transform([bad_student])
 prediction = pipeline.named_steps['randomforestregressor'].predict(new_essay_transformed)
