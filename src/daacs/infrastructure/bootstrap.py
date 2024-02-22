@@ -1,13 +1,12 @@
 import configparser
 import logging
 import os
+import pandas as pd
 from daacs.infrastructure.wgu_file import WGU_File
-from pyspark.sql.functions import desc, lit, udf, corr, when, lower, col
-
-
 
 class Bootstrap:
     PROJ_ROOT = None
+    
 
     """
     Used for loading data directly into a spark dataframe.
@@ -30,7 +29,7 @@ class Bootstrap:
 
     """
     def __init__(self):
-
+        self.DAACS_ID = "daacs_id"
         os.environ['TOKENIZERS_PARALLELISM'] = 'false'
         current_directory = os.path.dirname(os.path.abspath(__file__))
         self.PROJ_ROOT = os.path.abspath(os.path.join(current_directory, '..', '..', '..'))
@@ -127,8 +126,30 @@ class Bootstrap:
                 # Rename the file
                 os.rename(old_file, new_file)
                 print(f"Renamed {old_file} to {new_file}")
+   
+    def get_essays_and_grades(self, ratings_columns = ['EssayID', 'TotalScore1', 'TotalScore2', 'TotalScore']) -> pd.DataFrame :
 
-    def get_essays_and_grades(self):
+        # Read the ratings CSV
+        wgu_ratings_raw = pd.read_csv(self.file_url(WGU_File.wgu_ratings), usecols=ratings_columns)
+        wgu_ratings_raw = wgu_ratings_raw.rename(columns={"EssayID": self.DAACS_ID})
+
+        # Filter unique essays
+        essay_id_counts = wgu_ratings_raw[self.DAACS_ID].value_counts()
+        unique_essay_ids = essay_id_counts[essay_id_counts == 1].index
+        wgu_ratings = wgu_ratings_raw[wgu_ratings_raw[self.DAACS_ID].isin(unique_essay_ids)]
+
+        # Read the essays human rated Parquet file
+        essays_human_rated = pd.read_parquet(self.file_url(WGU_File.essay_human_ratings))
+        essays_human_rated = essays_human_rated.rename(columns={"EssayID": self.DAACS_ID})
+        essays_human_rated = essays_human_rated[essays_human_rated[self.DAACS_ID].isin(unique_essay_ids)]
+
+        # Merge the datasets
+        essays_and_grades = pd.merge(essays_human_rated, wgu_ratings, on=self.DAACS_ID)
+
+        return essays_and_grades
+    
+
+    def get_essays_and_grades_spark(self):
         DAACS_ID="daacs_id"
         spark = self.get_spark() 
 
