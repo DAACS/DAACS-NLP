@@ -56,3 +56,7 @@ export PYTHONPATH=/Users/afraser/Documents/src/daacs-nlp/src:/Users/afraser/Docu
 ##
 
 ```
+
+export JAVA_HOME="/Users/afraser/.jdk/jdk-11.0.18+10/Contents/Home"
+export SPARK_HOME="/Users/afraser/Documents/src/daacs-nlp/.venv/lib/python3.11/site-packages/pyspark"
+export PYTHONPATH=/Users/afraser/Documents/src/daacs-nlp/.venv/bin/python:/Users/afraser/Documents/src/daacs-nlp/src:/Users/afraser/Documents/src/daacs-nlp/.venv/lib/python3.11/site-packages
