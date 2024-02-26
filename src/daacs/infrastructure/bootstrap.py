@@ -145,12 +145,14 @@ class Bootstrap:
 
         # Merge the datasets
         essays_and_grades = pd.merge(essays_human_rated, wgu_ratings, on=self.DAACS_ID)
-
+        essays_and_grades.set_index(self.DAACS_ID, inplace=True)
+        essays_and_grades.index = essays_and_grades.index.astype(int)
+        
         return essays_and_grades
     
 
     def get_essays_and_grades_spark(self):
-        DAACS_ID="daacs_id"
+
         spark = self.get_spark() 
 
         ## These are for test and train!! We hae grades for these!! 
@@ -163,12 +165,12 @@ class Bootstrap:
         wgu_ratings_raw = spark.read.option("header", True)\
             .csv(self.file_url(WGU_File.wgu_ratings))\
             .select(ratings_columns)\
-            .withColumnRenamed("EssayID", DAACS_ID)
-        essay_id_counts = wgu_ratings_raw.groupBy(DAACS_ID).count()
-        unique_essay_ids = essay_id_counts.filter(col("count") == 1).select(DAACS_ID)
-        wgu_ratings = wgu_ratings_raw.join(unique_essay_ids, [DAACS_ID])
+            .withColumnRenamed("EssayID", self.DAACS_ID)
+        essay_id_counts = wgu_ratings_raw.groupBy(self.DAACS_ID).count()
+        unique_essay_ids = essay_id_counts.filter(col("count") == 1).select(self.DAACS_ID)
+        wgu_ratings = wgu_ratings_raw.join(unique_essay_ids, [self.DAACS_ID])
 
-        # wgu_ratings.printSchema() 
+        # wgu_ratings.printSchema() D
         # root
         #  |-- daacs_id: string (nullable = true)
         #  |-- TotalScore1: string (nullable = true)
@@ -177,8 +179,8 @@ class Bootstrap:
 
 
         essays_human_rated = spark.read.parquet(self.file_url(WGU_File.essay_human_ratings))\
-            .withColumnRenamed("EssayID", DAACS_ID)\
-            .join(unique_essay_ids, [DAACS_ID])
+            .withColumnRenamed("EssayID", self.DAACS_ID)\
+            .join(unique_essay_ids, [self.DAACS_ID])
 
-        essays_and_grades = essays_human_rated.join(wgu_ratings, [DAACS_ID])
+        essays_and_grades = essays_human_rated.join(wgu_ratings, [self.DAACS_ID])
         return essays_and_grades
