@@ -29,3 +29,4 @@ joblib
 huggingface_hub
 simpletransformers
 accelerate
+catboost
