@@ -21,7 +21,6 @@ load_dotenv()
 OPENAI_MODEL = "gpt-4"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
-
 PROMPT_COUNTRY_INFO = """
     Provide information about {country}.
     {format_instructions}
@@ -46,7 +45,11 @@ def main():
         country=country_name, format_instructions=parser.get_format_instructions()
     )
 
+    # output = llm.invoke(chat_prompt_with_values.to_messages())
+
     output = llm.invoke(chat_prompt_with_values.to_messages())
+    output_json = output.json()  # Assuming 'output' has a .json() method
+
 
     country = parser.parse(output.content)
     
