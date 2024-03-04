@@ -11,20 +11,17 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from daacs.infrastructure.bootstrap import Bootstrap
 from daacs.infrastructure.decorators.timeit import timeit
-# Initialize and process data
+from daacs.infrastructure.string_utils import StringUtils
+
 b = Bootstrap()
 nltk.download("stopwords")
 essay_column = "essay_modified"
 model_file = 'random_forest_model.joblib'
 
 essays_pd = b.get_essays_and_grades()
-stop_words = set(stopwords.words('english'))
 
-# Text preprocessing
-essays_pd['essay_modified'] = essays_pd['essay'].str.lower().str.replace("[^\\w\\s]", "", regex=True)
-essays_pd['essay_words'] = essays_pd['essay_modified'].str.split()
-essays_pd['essay_modified'] = essays_pd['essay_words'].apply(lambda x: ' '.join([word for word in x if word not in stop_words]))
-essays_pd['TotalScore1'] = pd.to_numeric(essays_pd['TotalScore1'], errors='coerce')
+## Text preprocessing
+essays_pd[essay_column] = essays_pd['essay'].apply(StringUtils.clean_sentence)
 essays_pd.dropna(subset=['TotalScore1'], inplace=True)
 
 # Prepare training and test data

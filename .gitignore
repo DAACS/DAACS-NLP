@@ -74,3 +74,8 @@ wandb/*
 logs/*
 random_forest_model.joblib
 simple_model/*
+catboost_info/*
+catboost_model.joblib
+gradient_boosting_model.joblib
+xgboost_model.joblib
+
