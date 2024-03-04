@@ -29,5 +29,11 @@ joblib
 huggingface_hub
 simpletransformers
 accelerate
+
+# Cython
 catboost
 xgboost
+
+word2vec 
+# glove
+fasttext

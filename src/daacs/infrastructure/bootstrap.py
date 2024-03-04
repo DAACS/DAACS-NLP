@@ -38,6 +38,7 @@ class Bootstrap:
         self.TENSOR_LOGS = f"{self.PROJ_ROOT}/tensor_logs"
         self.SIMPLE_DIR = f"{self.PROJ_ROOT}/simple_model"
         self.BERT_DIR = f"{self.PROJ_ROOT}/bert_model"
+        self.ENCODED_DATA_DIR = f"{self.DATA_DIR}/encodings/"
         
 
     def file_url(self, fn: str, prefix="file:///"):
