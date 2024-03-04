@@ -1,13 +1,12 @@
-
+from gensim.models import FastText
 import numpy as np
 import pandas as pd
 import nltk
 from itertools import chain
-from gensim.models import Word2Vec
 from daacs.infrastructure.bootstrap import Bootstrap
 from daacs.infrastructure.string_utils import StringUtils
 
-class WordToVecEncoder:
+class FastTextEncoder:
     def __init__(self, df: pd.DataFrame, bootstrap: Bootstrap, output_path:str = None):
         self.output_path = output_path if output_path else bootstrap.ENCODED_DATA_DIR 
         self.bootstrap = bootstrap
@@ -31,8 +30,8 @@ class WordToVecEncoder:
             # Flatten the list of tokenized essays to a list of sentences
             tokenized_essays = list(chain.from_iterable(self.df[tokenized_column]))
 
-            # Train the Word2Vec model
-            model = Word2Vec(sentences=tokenized_essays, vector_size=vector_size, window=5, min_count=1, workers=4)
+            # Train the FastText model
+            model = FastText(sentences=tokenized_essays, vector_size=vector_size, window=5, min_count=1, workers=4)
 
             # Function to vectorize a tokenized essay
             def vectorize_essay(tokenized_essay):
@@ -44,7 +43,6 @@ class WordToVecEncoder:
         else:
             print(f"Column '{tokenized_column}' not found in DataFrame.")
         return self
-    
-    def get_data(self) -> pd.DataFrame :
-        return self.df
 
+    def get_data(self) -> pd.DataFrame:
+        return self.df
