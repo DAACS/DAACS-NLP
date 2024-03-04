@@ -4,7 +4,7 @@ from daacs.infrastructure.encoders.word_to_vec import WordToVecEncoder
 from daacs.infrastructure.encoders.fast_text import FastTextEncoder
 
 b = Bootstrap() 
-eg  = b.get_essays_and_grades(ratings_columns=['TotalScore']) 
+eg  = b.get_essays_and_grades() 
 
 print(" *** word2Vec *** ")
 wtv = WordToVecEncoder(bootstrap=b, df=eg) 
@@ -24,9 +24,16 @@ eg_plus_ftx_cols: pd.DataFrame = ftx \
         .get_data() 
 print(eg_plus_ftx_cols.head(3))
 
-
 # this is also an option...
 # essays_and_grades_plus_wtv_cols: pd.DataFrame  = wtv\
 #         .add_tokenized_column()  \
 #         .add_vectorized_column() \
 # print(wtv.df.head(2))
+
+# To remove stop words, you'd do this.
+# eg_plus_wtv_cols: pd.DataFrame  = wtv \
+#         .add_tokenized_column(remove_stopwords=True)  \
+#         .add_vectorized_column() \
+#         .get_data() 
+
+
