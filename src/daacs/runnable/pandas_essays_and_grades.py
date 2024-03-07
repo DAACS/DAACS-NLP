@@ -7,6 +7,6 @@ from pyspark.sql.functions import desc, lit, udf, corr, when, lower, col
 
 DAACS_ID="daacs_id"
 b = Bootstrap()
-essays_and_grades = b.get_essays_and_grades(ratings_columns = ['EssayID', 'TotalScore1']) 
+essays_and_grades = b.get_essays_and_grades()
 
 print(essays_and_grades.head(10))

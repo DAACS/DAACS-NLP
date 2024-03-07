@@ -34,6 +34,6 @@ accelerate
 catboost
 xgboost
 
-word2vec 
+#word2vec 
 # glove
-fasttext
+#fasttext
