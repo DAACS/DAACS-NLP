@@ -128,10 +128,11 @@ class Bootstrap:
                 os.rename(old_file, new_file)
                 print(f"Renamed {old_file} to {new_file}")
    
-    def get_essays_and_grades(self, ratings_columns = ['EssayID', 'TotalScore1', 'TotalScore2', 'TotalScore']) -> pd.DataFrame :
+    def get_essays_and_grades(self) -> pd.DataFrame :
+  #  def get_essays_and_grades(self, ratings_columns = ['EssayID', 'TotalScore1', 'TotalScore2', 'TotalScore']) -> pd.DataFrame :
 
         # Read the ratings CSV
-        wgu_ratings_raw = pd.read_csv(self.file_url(WGU_File.wgu_ratings), usecols=ratings_columns)
+        wgu_ratings_raw = pd.read_csv(self.file_url(WGU_File.wgu_ratings))
         wgu_ratings_raw = wgu_ratings_raw.rename(columns={"EssayID": self.DAACS_ID})
 
         # Filter unique essays
