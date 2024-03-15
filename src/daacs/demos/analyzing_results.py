@@ -12,7 +12,7 @@ from sklearn.inspection import partial_dependence
 #       Load your data
 
 #       Create a Random Forest model if not already created
-#rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
 #rf_model.fit(X, y)
 
 #       Choose the feature for which you want to create a partial dependence plot
