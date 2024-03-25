@@ -19,17 +19,17 @@ class WordToVecEncoder:
                                for sentence in nltk.sent_tokenize(essay)]
         return tokenized_sentences
 
-    def add_tokenized_column(self, column_name='essay', token_column_name='tokenized_essay', remove_stopwords: bool = False):
-        if self.df is not None and column_name in self.df.columns:
-            self.df[token_column_name] = self.df[column_name].apply(lambda essay: self.tokenize_essay(essay, remove_stopwords))
+    def add_tokenized_column(self, inbound_text_column='essay', outbound_tokenized_column='tokenized_essay', remove_stopwords: bool = False):
+        if self.df is not None and inbound_text_column in self.df.columns:
+            self.df[outbound_tokenized_column] = self.df[inbound_text_column].apply(lambda essay: self.tokenize_essay(essay, remove_stopwords))
         else:
-            print(f"Data not loaded or column '{column_name}' not found in DataFrame.")
+            print(f"Data not loaded or column '{inbound_text_column}' not found in DataFrame.")
         return self
 
-    def add_vectorized_column(self, tokenized_column='tokenized_essay', vectorized_column='vectorized_essay', vector_size=100):
-        if self.df is not None and tokenized_column in self.df.columns:
+    def add_vectorized_column(self, inbound_tokenized_column='tokenized_essay', outbound_vectorized_column='wvvectorized_essay', vector_size=100):
+        if self.df is not None and inbound_tokenized_column in self.df.columns:
             # Flatten the list of tokenized essays to a list of sentences
-            tokenized_essays = list(chain.from_iterable(self.df[tokenized_column]))
+            tokenized_essays = list(chain.from_iterable(self.df[inbound_tokenized_column]))
 
             # Train the Word2Vec model
             model = Word2Vec(sentences=tokenized_essays, vector_size=vector_size, window=5, min_count=1, workers=4)
@@ -40,9 +40,9 @@ class WordToVecEncoder:
                 return np.mean(essay_vector, axis=0) if essay_vector else np.zeros(vector_size)
 
             # Apply the vectorize_essay function
-            self.df[vectorized_column] = self.df[tokenized_column].apply(vectorize_essay)
+            self.df[outbound_vectorized_column] = self.df[inbound_tokenized_column].apply(vectorize_essay)
         else:
-            print(f"Column '{tokenized_column}' not found in DataFrame.")
+            print(f"Column '{inbound_tokenized_column}' not found in DataFrame.")
         return self
     
     def get_data(self) -> pd.DataFrame :

@@ -9,7 +9,7 @@ essays_and_grades = b.get_essays_and_grades()
 # set the range of daacs id's to query.
 
 low_boundary = 50
-high_boundary = 60
+high_boundary = 55
 
 filtered_essays = essays_and_grades[(essays_and_grades.index > low_boundary) & (essays_and_grades.index < high_boundary)]
 
@@ -24,7 +24,6 @@ def apply_estimates(row):
 filtered_essays = filtered_essays.apply(apply_estimates, axis=1)
 
 filtered_essays.to_csv("/tmp/garbage") 
-
 print(filtered_essays.drop(columns=['essay', 'file_name']))
 
 
