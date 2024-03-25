@@ -19,14 +19,14 @@ class WordToVecEncoder:
                                for sentence in nltk.sent_tokenize(essay)]
         return tokenized_sentences
 
-    def add_tokenized_column(self, inbound_text_column='essay', outbound_tokenized_column='tokenized_essay', remove_stopwords: bool = False):
+    def add_tokenized_column(self, inbound_text_column='essay', outbound_tokenized_column='tokenized', remove_stopwords: bool = False):
         if self.df is not None and inbound_text_column in self.df.columns:
             self.df[outbound_tokenized_column] = self.df[inbound_text_column].apply(lambda essay: self.tokenize_essay(essay, remove_stopwords))
         else:
             print(f"Data not loaded or column '{inbound_text_column}' not found in DataFrame.")
         return self
 
-    def add_vectorized_column(self, inbound_tokenized_column='tokenized_essay', outbound_vectorized_column='wvvectorized_essay', vector_size=100):
+    def add_vectorized_column(self, inbound_tokenized_column='tokenized', outbound_vectorized_column='vectorized', vector_size=100):
         if self.df is not None and inbound_tokenized_column in self.df.columns:
             # Flatten the list of tokenized essays to a list of sentences
             tokenized_essays = list(chain.from_iterable(self.df[inbound_tokenized_column]))
